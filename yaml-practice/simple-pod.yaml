@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: hello-homelab
+  labels:
+    purpose: learning
+specs:
+  containers:
+  - name: hello
+    images: nginx:alpine
+    ports:
+    - containerPort: 80

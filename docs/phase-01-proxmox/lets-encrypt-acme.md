@@ -1,39 +1,40 @@
-# Securing Proxmox GUI with Let's Encrypt + Cloudflare DNS-01
+# Phase 1 – Proxmox GUI Security: Let's Encrypt + Cloudflare DNS-01
 
-## Goal
-Replace self-signed certificate with trusted Let's Encrypt cert for https://pve.rdomlab.xyz:8006
+## Objective
+Replace scary self-signed cert with free, auto-renewing, browser-trusted certificate.
 
-## Why this way?
-- DNS-01 challenge → no need to expose port 80/8006 to internet
-- Cloudflare → free, fast DNS + API for automation
-- Staging first → avoid rate limits during testing
+## Why this approach?
+- DNS-01 challenge = no need to expose port 80 or 8006 publicly (security win)
+- Cloudflare = fast propagation, free API, scoped tokens (least privilege)
+- Staging environment first = safe testing without hitting real rate limits
 
-## Architecture
-(simple text diagram)
-Laptop ──(LAN)──► pve.rdomlab.xyz (192.168.1.23:8006)
-                  ↑
-            Cloudflare DNS (A record → local IP)
+## High-Level Diagram (use Mermaid or ASCII art)
+<img width="1031" height="540" alt="mermaid-diagram-2026-02-08-004248" src="https://github.com/user-attachments/assets/e168a007-4b30-458e-8f27-0378b88ab2ff" />
 
-## Steps I followed
-1. Set up Cloudflare for rdomlab.xyz (nameservers change in Namecheap)
-2. Created scoped API token (DNS Edit + Zone Read, zone-specific)
-3. Added A record pve → public IP (temporary)
-4. In Proxmox ACME:
-   - Created Cloudflare challenge plugin (CF_Token + CF_Account_ID)
-   - Created staging account → tested order
-   - Created production account → ordered real cert
-5. Fixed browser cache & pveproxy restart issues
-6. Switched A record to local IP 192.168.1.23 for LAN access
+## Key Steps I Performed
+1. Changed nameservers from Namecheap → Cloudflare
+2. Created scoped API token (DNS:Edit + Zone:Read, zone-specific only!)
+3. Added temporary A record → public IP (for validation)
+4. In Proxmox GUI → Datacenter → ACME:
+   - Added Cloudflare challenge plugin (CF_Token + CF_Account_ID)
+   - Created staging account → ordered test cert (success but browser warning expected)
+   - Created production account → ordered real cert (TASK OK)
+5. Troubleshooting:
+   - pveproxy restart hang → used `pkill -9 pveproxy` + `systemctl start`
+   - Persistent warning → staging issuer, browser cache
+   - Timeout on domain → changed A record back to local LAN IP 192.168.1.23
+6. Final result: Green padlock at https://pve.rdomlab.xyz:8006
 
-## Security Decisions
-- Scoped token, no global key
+## Security Choices & Lessons
+- Scoped token (never global API key!)
 - No port forwarding (never expose pveproxy to WAN)
-- Validation delay 60s (later increased if needed)
-- Used staging environment first
+- Validation delay 60s (bump if propagation slow)
+- Staging first = rate-limit safety net
+- Always test in incognito + flush DNS
 
-## Lessons Learned
-- Staging certs are NOT trusted by browsers (on purpose)
-- pveproxy restart can hang → use pkill -9 + start
-- DNS propagation & cache matter a lot
+## Proof (add screenshots – blur secrets!)
+- Cloudflare token creation
+- Proxmox ACME plugin config
+- Tasks log from production order
+- Final green padlock + cert details (issuer: Let's Encrypt R12/R13)
 
-Screenshots: (add blurred ones – token creation, ACME GUI, final cert details, Tasks log)

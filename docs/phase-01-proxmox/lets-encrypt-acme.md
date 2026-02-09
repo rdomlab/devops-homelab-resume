@@ -9,7 +9,8 @@ Replace scary self-signed cert with free, auto-renewing, browser-trusted certifi
 - Staging environment first = safe testing without hitting real rate limits
 
 ## High-Level Diagram (use Mermaid or ASCII art)
-<img width="1031" height="540" alt="mermaid-diagram-2026-02-08-004248" src="https://github.com/user-attachments/assets/e168a007-4b30-458e-8f27-0378b88ab2ff" />
+![mermaid-diagram-2026-02-08-004248 (1)](https://github.com/user-attachments/assets/0ade1738-baac-4614-9fdb-4750ad17365a)
+
 
 ## Key Steps I Performed
 1. Changed nameservers from Namecheap → Cloudflare

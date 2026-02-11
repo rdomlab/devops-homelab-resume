@@ -24,3 +24,13 @@ Suggested minimal set for host level (pve node):
 ## What I'd add next (e.g. rate-limiting, fail2ban later)
 - a 'management' group
 - fail2ban
+
+## Troubleshooting Lockout After Tweaks
+- What happened: Added DROP rule + moved SSH → lost GUI/SSH (ping OK).
+- Why: Rules misorder or source mismatch → default DROP blocked.
+- Fix steps:
+  1. Physical console (Ctrl+Alt+F1) → login root.
+  2. `systemctl stop pve-firewall` → restored access.
+  3. Fixed rules in GUI (ensured DROP last, sources correct).
+  4. Restarted firewall + tested.
+- Lesson: Test incrementally, keep console open during changes.

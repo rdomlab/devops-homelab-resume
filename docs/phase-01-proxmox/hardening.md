@@ -30,7 +30,8 @@ Suggested minimal set for host level (pve node):
 - Why: Rules misorder or source mismatch → default DROP blocked.
 - Fix steps:
   1. Physical console (Ctrl+Alt+F1) → login root.
-  2. `systemctl stop pve-firewall` → restored access.
+  2. `systemctl stop pve-firewall` → restored access. <img width="1358" height="549" alt="rdomlab-firewall-status" src="https://github.com/user-attachments/assets/7774df76-fc0a-4d37-a6af-1f72ceeeecf4" />
+
   3. Fixed rules in GUI (ensured DROP last, sources correct).
   4. Restarted firewall + tested.
 - Lesson: Test incrementally, keep console open during changes.

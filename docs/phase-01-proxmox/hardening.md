@@ -92,7 +92,9 @@ Eliminate password logins, disable root SSH, use key-only auth — secure access
 
 ## Proof
 - Screenshot of successful key login
-  <img width="584" height="339" alt="rdomlab-login-success" src="https://github.com/user-attachments/assets/3323b81f-4944-40e5-b490-02223f758f59" />
+
+<img width="584" height="339" alt="rdomlab-login-success" src="https://github.com/user-attachments/assets/3323b81f-4944-40e5-b490-02223f758f59" />
 
 - Screenshot of failed root attempt
-  <img width="585" height="178" alt="rdomlab-root-login-fail" src="https://github.com/user-attachments/assets/6c76a8b8-6149-4eb7-ae8c-9df4a411c111" />
+
+<img width="585" height="178" alt="rdomlab-root-login-fail" src="https://github.com/user-attachments/assets/6c76a8b8-6149-4eb7-ae8c-9df4a411c111" />

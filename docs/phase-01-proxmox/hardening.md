@@ -56,3 +56,43 @@ No packages found that can be upgraded unattended...
 - Auto-patches Debian vulns (reduces attack surface).
 - Manual Proxmox updates → control over potential breaking changes.
 - Aligns with production caution (no-sub repo warning is expected/cosmetic).
+
+# SSH Hardening on Proxmox Host
+
+## Goal
+Eliminate password logins, disable root SSH, use key-only auth — secure access before creating K8s cluster VMs.
+
+## Why
+- Root + password = high risk (brute-force common).
+- Key auth stronger + auditable.
+- Aligns with production Kubernetes security (no root logins, audited access).
+
+## Steps Performed
+1. Created sudo user `devops`.
+2. Generated ed25519 key on laptop → copied to host.
+3. Edited /etc/ssh/sshd_config:
+   - PermitRootLogin no
+   - PasswordAuthentication no
+4. Restarted ssh service.
+5. Tested: Key login works, root fails.
+
+## Tests
+- ssh devops@192.168.1.23 → success (key)
+- ssh root@192.168.1.23 → denied (publickey)
+- From external IP (phone hotspot) → fails (firewall blocks anyway)
+
+## Security Decisions
+- ed25519 keys (modern, secure).
+- No password fallback.
+- Fail2ban added for brute-force protection.
+
+## Lessons
+- Always test in new session before closing old one.
+- Physical console = safety net for recovery.
+
+## Proof
+- Screenshot of successful key login
+  <img width="584" height="339" alt="rdomlab-login-success" src="https://github.com/user-attachments/assets/3323b81f-4944-40e5-b490-02223f758f59" />
+
+- Screenshot of failed root attempt
+  <img width="585" height="178" alt="rdomlab-root-login-fail" src="https://github.com/user-attachments/assets/6c76a8b8-6149-4eb7-ae8c-9df4a411c111" />

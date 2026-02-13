@@ -35,3 +35,24 @@ Suggested minimal set for host level (pve node):
   3. Fixed rules in GUI (ensured DROP last, sources correct).
   4. Restarted firewall + tested.
 - Lesson: Test incrementally, keep console open during changes.
+
+## Automatic Security Updates Configuration (unattended-upgrades)
+
+**Status**: Configured for Debian security only. Proxmox packages blacklisted (manual upgrade recommended for kernel/host stability).
+
+**Key Config**:
+- Origins: Debian trixie-security
+- Blacklist: proxmox.*, pve.* (pinned -32768)
+- No auto-reboot
+
+**Dry-Run Output** (example):
+No packages found that can be upgraded unattended...
+
+**GUI Warning Suppression**:
+- Edited proxmoxlib.js to disable subscription popup.
+- Restarted pveproxy → clean dashboard.
+
+**Why this way**:
+- Auto-patches Debian vulns (reduces attack surface).
+- Manual Proxmox updates → control over potential breaking changes.
+- Aligns with production caution (no-sub repo warning is expected/cosmetic).
